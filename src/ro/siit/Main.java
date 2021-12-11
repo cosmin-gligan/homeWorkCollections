@@ -1,5 +1,9 @@
 package ro.siit;
 
+import ro.siit.collections.model.CollegeEnum;
+import ro.siit.collections.model.Student;
+import ro.siit.service.HobbiesService;
+
 public class Main {
     /*
      1. Define for Hobby a class that contains:
@@ -19,6 +23,8 @@ public class Main {
         This can be used together with findStudentsWithHobby to determine which students share two (and even more) hobbies
     */
     public static void main(String[] args) {
-	// write your code here
+
+        HobbiesService.startApp();
+
     }
 }

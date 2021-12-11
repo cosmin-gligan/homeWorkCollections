@@ -1,0 +1,29 @@
+package ro.siit.collections.model;
+
+import java.util.Map;
+import java.util.TreeMap;
+
+public class Student extends Person {
+    private String studentID; //numarul matricol
+    private String college;
+
+
+    public Student(String firstName, String lastName, String cnp, int age, String studentID, String college){
+        super(firstName, lastName, cnp, age);
+        this.studentID = studentID;
+        this.college = college;
+    }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", cnp=" + cnp +
+                ", age=" + age +
+                ", gender='" + gender + '\'' +
+                ", studentID='" + studentID + '\'' +
+                ", college='" + college + '\'' +
+                '}';
+    }
+}

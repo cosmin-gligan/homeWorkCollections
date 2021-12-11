@@ -8,11 +8,11 @@ public abstract class Person {
 
     protected String firstName;
     protected String lastName;
-    protected int cnp;
+    protected String cnp;
     protected int age;
     protected String gender;
 
-    public Person(String firstName, String lastName, int cnp, int age) {
+    protected Person(String firstName, String lastName, String cnp, int age) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.cnp = cnp;
@@ -36,11 +36,11 @@ public abstract class Person {
         this.lastName = lastName;
     }
 
-    public int getCnp() {
+    public String getCnp() {
         return cnp;
     }
 
-    public void setCnp(int cnp) {
+    public void setCnp(String cnp) {
         this.cnp = cnp;
     }
 
@@ -61,9 +61,9 @@ public abstract class Person {
     }
 
     @NotNull
-    private String getGenderForCnp(int cnp) {
+    private String getGenderForCnp(String cnp) {
 
-        int firstDigit = Integer.parseInt(String.valueOf(cnp).substring(0, 1));
+        int firstDigit = Integer.parseInt(cnp.substring(0, 1));
 
         if (firstDigit == 1 || firstDigit == 5) {
             return "M";
@@ -82,7 +82,7 @@ public abstract class Person {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Person person = (Person) o;
-        return getCnp() == person.getCnp();
+        return this.getCnp() == person.getCnp();
     }
 
     @Override

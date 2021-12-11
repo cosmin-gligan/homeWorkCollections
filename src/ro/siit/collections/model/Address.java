@@ -9,16 +9,18 @@ public class Address {
     private String city;
     private String county;
     private String country;
+    private String postalCode;
 
-    public Address(String street, String number, String city, String county) {
-        this(street, number, city, county, "RO");
+    public Address(String street, String number, String city, String county, String postalCode) {
+        this(street, number, city, county, postalCode, "Romania");
     }
 
-    public Address(String street, String number, String city, String county, String country) {
+    public Address(String street, String number, String city, String county, String postalCode, String country) {
         this.street = street;
         this.number = number;
         this.city = city;
         this.county = county;
+        this.postalCode = postalCode;
         this.country = country;
     }
 
@@ -62,12 +64,21 @@ public class Address {
         this.country = country;
     }
 
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
+
     @Override
     public String toString() {
         return "Address{" +
                 "street='" + street + '\'' +
                 ", number='" + number + '\'' +
                 ", city='" + city + '\'' +
+                ", postalCode='" + postalCode + '\'' +
                 ", county='" + county + '\'' +
                 ", country='" + country + '\'' +
                 '}';
@@ -78,12 +89,12 @@ public class Address {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Address address = (Address) o;
-        return this.toString().equals(address.toString());
+        return this.getPostalCode().equals(address.getPostalCode());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.toString());
+        return Objects.hash(this.getPostalCode());
     }
 
 }
