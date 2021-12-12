@@ -16,14 +16,12 @@ public class Student extends Person {
 
     @Override
     public String toString() {
-        return "Student{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
+        return "Student:" +
+                "  Fullnane='" + getFullName() + '\'' +
                 ", cnp='" + cnp +'\'' +
                 ", age=" + age +
                 ", gender='" + gender + '\'' +
                 ", studentID='" + studentID + '\'' +
-                ", college='" + college + '\'' +
-                '}';
+                ", college='" + college + '\'';
     }
 }

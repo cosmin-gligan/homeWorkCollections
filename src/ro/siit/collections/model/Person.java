@@ -60,6 +60,10 @@ public abstract class Person {
         this.gender = gender;
     }
 
+    public String getFullName(){
+        return this.getFirstName() + " " + this.getLastName();
+    }
+
     @NotNull
     private String getGenderForCnp(String cnp) {
 

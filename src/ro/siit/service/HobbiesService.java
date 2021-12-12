@@ -20,8 +20,6 @@ public class HobbiesService {
 
         Student randomStudent = getRandomStudent(students);
 
-//        System.out.println(randomStudent);
-
         printStudentHobbies(randomStudent, studentHobbies);
     }
 
@@ -48,8 +46,8 @@ public class HobbiesService {
             put(bicuStefan.getCnp(), bicuStefan);
             put(coatuSorin.getCnp(), coatuSorin);
             put(dunaDenisa.getCnp(), dunaDenisa);
-            put(nicoaraTania.getCnp(), nicoaraTania );
-            put(panaClaudia.getCnp(), panaClaudia );
+            put(nicoaraTania.getCnp(), nicoaraTania);
+            put(panaClaudia.getCnp(), panaClaudia);
         }};
         return studentsMap;
     }
@@ -70,8 +68,8 @@ public class HobbiesService {
         Map<String, Address> addressesMap = new TreeMap<>() {{
             put(stefan.getPostalCode(), stefan);
             put(mihai.getPostalCode(), mihai);
-            put(mihai.getPostalCode(), mihai);
-            put(cuza.getPostalCode(), vladimirescu);
+            put(vladimirescu.getPostalCode(), vladimirescu);
+            put(cuza.getPostalCode(), cuza);
             put(eminescu.getPostalCode(), eminescu);
             put(sperantei.getPostalCode(), sperantei);
             put(viitorului.getPostalCode(), viitorului);
@@ -104,21 +102,38 @@ public class HobbiesService {
         dartsAddresses.add(addresses.get("12357"));
         darts.setAddressList(dartsAddresses);
 
-        Hobby bowling = new Hobby("Bowling", 1);
+        Hobby bowling = new Hobby("Bowling", 2);
         List<Address> bowlingAddresses = new ArrayList<>();
         bowlingAddresses.add(addresses.get("82357"));
         bowlingAddresses.add(addresses.get("62151"));
         bowling.setAddressList(bowlingAddresses);
 
-        Hobby cinema = new Hobby("Cinema", 1);
+        Hobby cinema = new Hobby("Cinema", 3);
         List<Address> cinemaAddresses = new ArrayList<>();
-        bowlingAddresses.add(addresses.get("62151"));
-        bowlingAddresses.add(addresses.get("15710"));
-        bowling.setAddressList(bowlingAddresses);
+        cinemaAddresses.add(addresses.get("62151"));
+        cinemaAddresses.add(addresses.get("15710"));
+        cinema.setAddressList(cinemaAddresses);
+
+        Hobby zoo = new Hobby("Zoo", 1);
+        List<Address> zooAddresses = new ArrayList<>();
+        zooAddresses.add(addresses.get("70185"));
+        zooAddresses.add(addresses.get("10532"));
+        zoo.setAddressList(zooAddresses);
+
+        Hobby shopping = new Hobby("Shopping", 3);
+        List<Address> shoppingAddresses = new ArrayList<>();
+        shoppingAddresses.add(addresses.get("44532"));
+        shoppingAddresses.add(addresses.get("62151"));
+        shopping.setAddressList(shoppingAddresses);
 
         Map<String, Hobby> hobbiesMap = new TreeMap<>() {{
             put(gym.getName(), gym);
             put(swimming.getName(), swimming);
+            put(darts.getName(), darts);
+            put(bowling.getName(), bowling);
+            put(cinema.getName(), cinema);
+            put(zoo.getName(), zoo);
+            put(shopping.getName(), shopping);
         }};
         return hobbiesMap;
     }
@@ -129,19 +144,21 @@ public class HobbiesService {
         for (Map.Entry<String, Student> studentEntry : studentMap.entrySet()) {
             ArrayList<Hobby> studentHobbiesList = new ArrayList<>();
             for (int i = 0; i < randomNumber(1, hobbiesMap.size()); i++) {
-                studentHobbiesList.add(getRandomHobby(hobbiesMap));
+                Hobby randomHobby = getRandomHobby(hobbiesMap);
+                if (!studentHobbiesList.contains(randomHobby))
+                    studentHobbiesList.add(randomHobby);
             }
             studentHobbiesMap.put(studentEntry.getValue(), studentHobbiesList);
         }
         return studentHobbiesMap;
     }
 
-    private static int randomNumber(int minNoOfHobbies, int maxNoOfHobbies){
-        Random random =  new Random();
+    private static int randomNumber(int minNoOfHobbies, int maxNoOfHobbies) {
+        Random random = new Random();
         return random.nextInt(maxNoOfHobbies - minNoOfHobbies + 1) + minNoOfHobbies;
     }
 
-    private static Hobby getRandomHobby(Map<String, Hobby> hobbiesMap){
+    private static Hobby getRandomHobby(Map<String, Hobby> hobbiesMap) {
         Object[] hobbiesKeys = hobbiesMap.keySet().toArray();
         List<Object> shuffleList = new ArrayList<>(Arrays.asList(hobbiesKeys));
         Collections.shuffle(shuffleList);
@@ -149,7 +166,7 @@ public class HobbiesService {
         return hobbiesMap.get(shuffleList.get(randomNumber(0, shuffleList.size() - 1)));
     }
 
-    private static Student getRandomStudent(Map<String, Student> studentMap){
+    private static Student getRandomStudent(Map<String, Student> studentMap) {
         Object[] studentKeys = studentMap.keySet().toArray();
         List<Object> shuffleList = new ArrayList<>(Arrays.asList(studentKeys));
         Collections.shuffle(shuffleList);
@@ -158,11 +175,11 @@ public class HobbiesService {
     }
 
 
-    private static void printStudentHobbies(Student student, Map<Student, ArrayList<Hobby>> studentHobbies){
+    private static void printStudentHobbies(Student student, Map<Student, ArrayList<Hobby>> studentHobbies) {
         Map.Entry<Student, ArrayList<Hobby>> studentHobies = null;
 
-        for ( Map.Entry<Student, ArrayList<Hobby>>  mapEntry : studentHobbies.entrySet()){
-            if (mapEntry.getKey() == student){
+        for (Map.Entry<Student, ArrayList<Hobby>> mapEntry : studentHobbies.entrySet()) {
+            if (mapEntry.getKey() == student) {
                 studentHobies = mapEntry;
                 break;
             }
@@ -170,13 +187,12 @@ public class HobbiesService {
 
         StringBuilder st = new StringBuilder();
         st.append(student.toString());
-        for ( Hobby hobby :  studentHobies.getValue()){
-            st.append("\n" + hobby.toString());
+        st.append("\n\tHobbies list:");
+        for (Hobby hobby : studentHobies.getValue()) {
+            st.append("\n\t\t - " + hobby.getName() + ": " + hobby.getCitiesList());
         }
 
         System.out.println(st.toString());
     }
-
-
 
 }

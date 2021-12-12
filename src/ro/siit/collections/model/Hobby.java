@@ -1,8 +1,6 @@
 package ro.siit.collections.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Hobby implements Comparable<Hobby> {
 
@@ -48,6 +46,28 @@ public class Hobby implements Comparable<Hobby> {
         this.addressList = addressList;
     }
 
+    public String getCitiesList(){
+
+        Set<String> citiesSet = new TreeSet<>();
+        for ( Address address : addressList){
+            if ( address != null ) {
+                citiesSet.add(address.getCity());
+            } else {
+                System.out.println("Adress is NULL for " + this.getName());
+            }
+        }
+
+        StringBuilder sb = new StringBuilder("");
+
+        String separator = "";
+        for ( String city : citiesSet ){
+            separator = (sb.length() > 0 ? ", " : "");
+            sb.append(separator + city);
+        }
+
+        return sb.toString();
+    }
+
     @Override
     public String toString() {
         return "Hobby{" +
@@ -56,6 +76,7 @@ public class Hobby implements Comparable<Hobby> {
                 ", adresaList=" + addressList +
                 '}';
     }
+
 
     @Override
     public boolean equals(Object o) {
