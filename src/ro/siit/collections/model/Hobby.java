@@ -8,15 +8,20 @@ public class Hobby implements Comparable<Hobby> {
 
     private String name;
     public int frequency;
-    public List<Address> adresaList = new ArrayList<>();
+    public List<Address> addressList = new ArrayList<>();
 
     public Hobby() {
     }
 
-    public Hobby(String name, int frequency, List<Address> adresaList) {
+    public Hobby(String name, int frequency) {
         this.name = name;
         this.frequency = frequency;
-        this.adresaList = adresaList;
+    }
+
+    public Hobby(String name, int frequency, List<Address> addressList) {
+        this.name = name;
+        this.frequency = frequency;
+        this.addressList = addressList;
     }
 
     public String getName() {
@@ -35,12 +40,12 @@ public class Hobby implements Comparable<Hobby> {
         this.frequency = frequency;
     }
 
-    public List<Address> getAdresaList() {
-        return adresaList;
+    public List<Address> getAddressList() {
+        return addressList;
     }
 
-    public void setAdresaList(List<Address> adresaList) {
-        this.adresaList = adresaList;
+    public void setAddressList(List<Address> addressList) {
+        this.addressList = addressList;
     }
 
     @Override
@@ -48,7 +53,7 @@ public class Hobby implements Comparable<Hobby> {
         return "Hobby{" +
                 "name='" + name + '\'' +
                 ", frequency=" + frequency +
-                ", adresaList=" + adresaList +
+                ", adresaList=" + addressList +
                 '}';
     }
 

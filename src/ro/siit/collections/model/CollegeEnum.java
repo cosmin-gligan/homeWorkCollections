@@ -6,7 +6,8 @@ public enum CollegeEnum {
     STIINTE_ECONOMICE("Stiinte Economice"),
     STIINTE_POLITICE("Stiinte Politice"),
     DREPT("Drept"),
-    MEDICINA("Medicina");
+    MEDICINA("Medicina"),
+    LITERE("Litere");
 
     private final String name;
 

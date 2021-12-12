@@ -19,7 +19,7 @@ public class Student extends Person {
         return "Student{" +
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", cnp=" + cnp +
+                ", cnp='" + cnp +'\'' +
                 ", age=" + age +
                 ", gender='" + gender + '\'' +
                 ", studentID='" + studentID + '\'' +
