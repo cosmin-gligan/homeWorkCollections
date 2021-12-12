@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public abstract class Person {
+public abstract class Person implements Comparable<Person> {
 
     protected String firstName;
     protected String lastName;
@@ -94,6 +94,15 @@ public abstract class Person {
         return Objects.hash(getCnp());
     }
 
+    @Override
+    public int compareTo(Person o){
+
+        return this.getCnp().compareTo(o.getCnp());
+
+    }
+
     //am facut metoda abstracta, fortam "copii" sa-si implementeze propriile lor versiuni
     public abstract String toString();
+
+
 }

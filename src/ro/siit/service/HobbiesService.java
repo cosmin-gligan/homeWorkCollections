@@ -7,23 +7,43 @@ import ro.siit.collections.model.Hobby;
 import ro.siit.collections.model.Student;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
-public class HobbiesService {
+public class HobbiesService implements MinimumRequirements {
 
-    public static void startApp() {
+    public void startApp() {
 
         Map<String, Student> students = new TreeMap<>(populateStudents());
         Map<String, Address> addresses = new TreeMap<>(populateAddresses());
         Map<String, Hobby> hobbies = new HashMap<>(populateHobbies(addresses));
 
-        Map<Student, ArrayList<Hobby>> studentHobbies = new HashMap<>(populateStudentsHobbies(students, hobbies));
+        Map<Student, List<Hobby>> studentHobbies = new HashMap<>(populateStudentsHobbies(students, hobbies));
 
         Student randomStudent = getRandomStudent(students);
 
         printStudentHobbies(randomStudent, studentHobbies);
+
+        Map<Hobby, Collection<Student>> students4Hobbies = new TreeMap<>();
+
+        for (Hobby hobby : hobbies.values()) {
+            Collection<Student> students4Hobby = findStudentsWithHobby(hobby, studentHobbies);
+            students4Hobbies.put(hobby, students4Hobby);
+        }
+
+        printStudents4Hobbies(students4Hobbies);
+
+        Map.Entry<Hobby, Collection<Student>> previousMapEntry = null;
+        for ( Map.Entry<Hobby, Collection<Student>> currentMapEntry: students4Hobbies.entrySet()) {
+            if (previousMapEntry!=null){
+                Collection<Student> studentWithSharedHobbies = findIntersection(previousMapEntry.getValue(), currentMapEntry.getValue());
+                printSharedStudentsBetweenHobies(previousMapEntry.getKey(), currentMapEntry.getKey(), studentWithSharedHobbies);
+            }
+            previousMapEntry = currentMapEntry;
+        }
+
     }
 
-    private static Map<String, Student> populateStudents() {
+    private Map<String, Student> populateStudents() {
         Student andreiPopescu = new Student("Popescu", "Andrei", "1861114137926", 35, "53126", CollegeEnum.POLITENICA.toString());
         Student ioanaGheorghe = new Student("Gheorghe", "Ioana", "2940122121224", 27, "12126", CollegeEnum.MEDICINA.toString());
         Student berindeSergiu = new Student("Berinde", "Sergiu", "1990209160134", 22, "22173", CollegeEnum.DREPT.toString());
@@ -52,7 +72,7 @@ public class HobbiesService {
         return studentsMap;
     }
 
-    private static Map<String, Address> populateAddresses() {
+    private Map<String, Address> populateAddresses() {
         Address stefan = new Address("Stefan cel Mare", "129", "Satu-Mare", "Satu-Mare", "10532");
         Address mihai = new Address("Mihai Viteazau", "231", "Cluj-Napoca", "Cluj", "38250");
         Address vladimirescu = new Address("Tudor Vladimirescu", "572", "Bucuresti", "Bucuresti", "10182");
@@ -81,7 +101,7 @@ public class HobbiesService {
         return addressesMap;
     }
 
-    private static Map<String, Hobby> populateHobbies(Map<String, Address> addresses) {
+    private Map<String, Hobby> populateHobbies(Map<String, Address> addresses) {
 
         Hobby gym = new Hobby("Gym", 3);
         List<Address> gymAddresses = new ArrayList<>();
@@ -138,11 +158,11 @@ public class HobbiesService {
         return hobbiesMap;
     }
 
-    private static Map<Student, ArrayList<Hobby>> populateStudentsHobbies(Map<String, Student> studentMap, Map<String, Hobby> hobbiesMap) {
-        Map<Student, ArrayList<Hobby>> studentHobbiesMap = new HashMap<>();
+    private Map<Student, List<Hobby>> populateStudentsHobbies(Map<String, Student> studentMap, Map<String, Hobby> hobbiesMap) {
+        Map<Student, List<Hobby>> studentHobbiesMap = new HashMap<>();
 
         for (Map.Entry<String, Student> studentEntry : studentMap.entrySet()) {
-            ArrayList<Hobby> studentHobbiesList = new ArrayList<>();
+            List<Hobby> studentHobbiesList = new ArrayList<>();
             for (int i = 0; i < randomNumber(1, hobbiesMap.size()); i++) {
                 Hobby randomHobby = getRandomHobby(hobbiesMap);
                 if (!studentHobbiesList.contains(randomHobby))
@@ -153,12 +173,12 @@ public class HobbiesService {
         return studentHobbiesMap;
     }
 
-    private static int randomNumber(int minNoOfHobbies, int maxNoOfHobbies) {
+    private int randomNumber(int minNoOfHobbies, int maxNoOfHobbies) {
         Random random = new Random();
         return random.nextInt(maxNoOfHobbies - minNoOfHobbies + 1) + minNoOfHobbies;
     }
 
-    private static Hobby getRandomHobby(Map<String, Hobby> hobbiesMap) {
+    private Hobby getRandomHobby(Map<String, Hobby> hobbiesMap) {
         Object[] hobbiesKeys = hobbiesMap.keySet().toArray();
         List<Object> shuffleList = new ArrayList<>(Arrays.asList(hobbiesKeys));
         Collections.shuffle(shuffleList);
@@ -166,7 +186,7 @@ public class HobbiesService {
         return hobbiesMap.get(shuffleList.get(randomNumber(0, shuffleList.size() - 1)));
     }
 
-    private static Student getRandomStudent(Map<String, Student> studentMap) {
+    private Student getRandomStudent(Map<String, Student> studentMap) {
         Object[] studentKeys = studentMap.keySet().toArray();
         List<Object> shuffleList = new ArrayList<>(Arrays.asList(studentKeys));
         Collections.shuffle(shuffleList);
@@ -175,10 +195,11 @@ public class HobbiesService {
     }
 
 
-    private static void printStudentHobbies(Student student, Map<Student, ArrayList<Hobby>> studentHobbies) {
-        Map.Entry<Student, ArrayList<Hobby>> studentHobies = null;
+    @Override
+    public void printStudentHobbies(Student student, Map<Student, List<Hobby>> studentHobbies) {
+        Map.Entry<Student, List<Hobby>> studentHobies = null;
 
-        for (Map.Entry<Student, ArrayList<Hobby>> mapEntry : studentHobbies.entrySet()) {
+        for (Map.Entry<Student, List<Hobby>> mapEntry : studentHobbies.entrySet()) {
             if (mapEntry.getKey() == student) {
                 studentHobies = mapEntry;
                 break;
@@ -193,6 +214,56 @@ public class HobbiesService {
         }
 
         System.out.println(st.toString());
+    }
+
+    @Override
+    public Collection<Student> findStudentsWithHobby(Hobby hobby, Map<Student, List<Hobby>> studentHobbies) {
+        Collection<Student> studentsList = new TreeSet<>();
+
+        for (Map.Entry<Student, List<Hobby>> mapEntry : studentHobbies.entrySet()) {
+            List<Hobby> hobbiesList = mapEntry.getValue();
+            if (hobbiesList.contains(hobby)) {
+                if (!studentsList.contains(mapEntry.getKey())) {
+                    studentsList.add(mapEntry.getKey());
+                }
+            }
+        }
+
+        return studentsList;
+    }
+
+    public void printStudents4Hobbies(Map<Hobby, Collection<Student>> students4Hobbies) {
+        for (Map.Entry<Hobby, Collection<Student>> mapEntry : students4Hobbies.entrySet()) {
+            System.out.println("\n" + mapEntry.getKey().getName() + ": " + mapEntry.getKey().getCitiesList());
+            for (Student student : mapEntry.getValue()) {
+                System.out.println("\n\t - " + student);
+            }
+        }
+    }
+
+    @Override
+    public Collection<Student> findIntersection(Collection<Student> c1, Collection<Student> c2) {
+        Collection intersectionList = new TreeSet();
+
+        intersectionList = c1.stream().distinct().filter(c2::contains).collect(Collectors.toSet());
+        //varianta manuala, cea de mai sus e mai eleganta
+        /*
+        for (Student student : c1) {
+            if (c2.contains(student)){
+                if (!intersectionList.contains(student)){
+                    intersectionList.add(student);
+                }
+            }
+        }
+        */
+        return intersectionList;
+    }
+
+    public void printSharedStudentsBetweenHobies(Hobby hobby1, Hobby hobby2, Collection<Student> studentCollection){
+        System.out.println("\nUrmatorii studenti impartasesc " + hobby1.getName() + " si " + hobby2.getName() + ":");
+        for (Student student : studentCollection){
+            System.out.println("\n\t" + student);
+        }
     }
 
 }

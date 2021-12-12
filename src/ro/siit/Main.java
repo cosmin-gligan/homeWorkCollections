@@ -22,9 +22,10 @@ public class Main {
         Collection<Student> findIntersection(Collection<Student> c1, Collection<Student> c2)
         This can be used together with findStudentsWithHobby to determine which students share two (and even more) hobbies
     */
-    public static void main(String[] args) {
 
-        HobbiesService.startApp();
+    public static void main(String[] args) {
+        HobbiesService  hobbiesService = new HobbiesService();
+        hobbiesService.startApp();
 
     }
 }
