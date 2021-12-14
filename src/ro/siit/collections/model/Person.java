@@ -3,7 +3,7 @@ package ro.siit.collections.model;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
-
+//nu era ceruta in tema, am vrut sa mai exersez cu "inheritance-ul"
 public abstract class Person implements Comparable<Person> {
 
     protected String firstName;
@@ -64,6 +64,7 @@ public abstract class Person implements Comparable<Person> {
         return this.getFirstName() + " " + this.getLastName();
     }
 
+    //intoarce sex-ul unei persoane in functie de CNO
     @NotNull
     private String getGenderForCnp(String cnp) {
 

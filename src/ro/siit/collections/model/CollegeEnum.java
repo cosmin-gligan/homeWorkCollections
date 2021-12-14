@@ -1,5 +1,5 @@
 package ro.siit.collections.model;
-
+//lista de facultati
 public enum CollegeEnum {
 
     POLITENICA("Politehnica"),

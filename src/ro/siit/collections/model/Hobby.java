@@ -46,6 +46,7 @@ public class Hobby implements Comparable<Hobby> {
         this.addressList = addressList;
     }
 
+    //metoda ajutatoarea sa afisam lista de orase in care poate fi practicat un Hobby
     public String getCitiesList(){
 
         Set<String> citiesSet = new TreeSet<>();

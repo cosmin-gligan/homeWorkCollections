@@ -12,30 +12,37 @@ import java.util.stream.Collectors;
 public class HobbiesService implements MinimumRequirements {
 
     public void startApp() {
-
+        //populam stundetii
         Map<String, Student> students = new TreeMap<>(populateStudents());
+        //populam adresele
         Map<String, Address> addresses = new TreeMap<>(populateAddresses());
+        //populam hobby-urile ( setam si adresele pe hobby-uri )
         Map<String, Hobby> hobbies = new HashMap<>(populateHobbies(addresses));
 
+        //setam hobby-uri aleatorii pe studenti
         Map<Student, List<Hobby>> studentHobbies = new HashMap<>(populateStudentsHobbies(students, hobbies));
-
         Student randomStudent = getRandomStudent(students);
-
+        //afisam hobby-urile pt. un student aleator
         printStudentHobbies(randomStudent, studentHobbies);
 
+        //facem o lista in care grupa studentii pe un hobby
         Map<Hobby, Collection<Student>> students4Hobbies = new TreeMap<>();
-
         for (Hobby hobby : hobbies.values()) {
             Collection<Student> students4Hobby = findStudentsWithHobby(hobby, studentHobbies);
             students4Hobbies.put(hobby, students4Hobby);
         }
 
+        //afisam studentii pt. fiecare hobby
         printStudents4Hobbies(students4Hobbies);
 
+        //studentii "share-uiti" intre 2 hobby-uri
         Map.Entry<Hobby, Collection<Student>> previousMapEntry = null;
-        for ( Map.Entry<Hobby, Collection<Student>> currentMapEntry: students4Hobbies.entrySet()) {
-            if (previousMapEntry!=null){
+        for (Map.Entry<Hobby, Collection<Student>> currentMapEntry : students4Hobbies.entrySet()) {
+            //daca avem un hobby anterior ( comparam cel curent cu anteriorul )
+            if (previousMapEntry != null) {
+                //studentii "share-uiti"
                 Collection<Student> studentWithSharedHobbies = findIntersection(previousMapEntry.getValue(), currentMapEntry.getValue());
+                //afisam lista de studenti "share-uiti" pe hobby-uri
                 printSharedStudentsBetweenHobies(previousMapEntry.getKey(), currentMapEntry.getKey(), studentWithSharedHobbies);
             }
             previousMapEntry = currentMapEntry;
@@ -100,7 +107,7 @@ public class HobbiesService implements MinimumRequirements {
         }};
         return addressesMap;
     }
-
+    //populam lista de adrese pe hobby-uri
     private Map<String, Hobby> populateHobbies(Map<String, Address> addresses) {
 
         Hobby gym = new Hobby("Gym", 3);
@@ -158,26 +165,30 @@ public class HobbiesService implements MinimumRequirements {
         return hobbiesMap;
     }
 
+    //hobby-uri aleatorii pentru studenti
     private Map<Student, List<Hobby>> populateStudentsHobbies(Map<String, Student> studentMap, Map<String, Hobby> hobbiesMap) {
         Map<Student, List<Hobby>> studentHobbiesMap = new HashMap<>();
-
         for (Map.Entry<String, Student> studentEntry : studentMap.entrySet()) {
             List<Hobby> studentHobbiesList = new ArrayList<>();
-            for (int i = 0; i < randomNumber(1, hobbiesMap.size()); i++) {
+            //numar aletoriu de hobby-uri pe student
+            int randomNoOfHobbies = randomNumber(1, hobbiesMap.size());
+            for (int i = 0; i < randomNoOfHobbies; i++) {
                 Hobby randomHobby = getRandomHobby(hobbiesMap);
                 if (!studentHobbiesList.contains(randomHobby))
                     studentHobbiesList.add(randomHobby);
             }
+            //setam lista de hobby-uri pe student
             studentHobbiesMap.put(studentEntry.getValue(), studentHobbiesList);
         }
         return studentHobbiesMap;
     }
 
+    //numar ateatoriu de hobby-uri ( folosim si in randomNoOfHobbies )
     private int randomNumber(int minNoOfHobbies, int maxNoOfHobbies) {
         Random random = new Random();
         return random.nextInt(maxNoOfHobbies - minNoOfHobbies + 1) + minNoOfHobbies;
     }
-
+    // intoarce un hobby aleatoriu ( folosit pt. popularea listei de hobby-uri pe student )
     private Hobby getRandomHobby(Map<String, Hobby> hobbiesMap) {
         Object[] hobbiesKeys = hobbiesMap.keySet().toArray();
         List<Object> shuffleList = new ArrayList<>(Arrays.asList(hobbiesKeys));
@@ -186,6 +197,7 @@ public class HobbiesService implements MinimumRequirements {
         return hobbiesMap.get(shuffleList.get(randomNumber(0, shuffleList.size() - 1)));
     }
 
+    //intoarce un student aleatoriu
     private Student getRandomStudent(Map<String, Student> studentMap) {
         Object[] studentKeys = studentMap.keySet().toArray();
         List<Object> shuffleList = new ArrayList<>(Arrays.asList(studentKeys));
@@ -194,18 +206,17 @@ public class HobbiesService implements MinimumRequirements {
         return studentMap.get(shuffleList.get(randomNumber(0, shuffleList.size() - 1)));
     }
 
-
+    //implementam metoda ceruta de interfata "MinimumRequirements"
+    //afisam hobby-urile aferente fiecarui student
     @Override
     public void printStudentHobbies(Student student, Map<Student, List<Hobby>> studentHobbies) {
         Map.Entry<Student, List<Hobby>> studentHobies = null;
-
         for (Map.Entry<Student, List<Hobby>> mapEntry : studentHobbies.entrySet()) {
             if (mapEntry.getKey() == student) {
                 studentHobies = mapEntry;
                 break;
             }
         }
-
         StringBuilder st = new StringBuilder();
         st.append(student.toString());
         st.append("\n\tHobbies list:");
@@ -216,10 +227,11 @@ public class HobbiesService implements MinimumRequirements {
         System.out.println(st.toString());
     }
 
+    //implementam metoda ceruta de interfata "MinimumRequirements"
+    //intoarce o lista de studenti care au un hobby comun
     @Override
     public Collection<Student> findStudentsWithHobby(Hobby hobby, Map<Student, List<Hobby>> studentHobbies) {
         Collection<Student> studentsList = new TreeSet<>();
-
         for (Map.Entry<Student, List<Hobby>> mapEntry : studentHobbies.entrySet()) {
             List<Hobby> hobbiesList = mapEntry.getValue();
             if (hobbiesList.contains(hobby)) {
@@ -228,10 +240,10 @@ public class HobbiesService implements MinimumRequirements {
                 }
             }
         }
-
         return studentsList;
     }
 
+    //afisam lista de studenti care practica un hobby
     public void printStudents4Hobbies(Map<Hobby, Collection<Student>> students4Hobbies) {
         for (Map.Entry<Hobby, Collection<Student>> mapEntry : students4Hobbies.entrySet()) {
             System.out.println("\n" + mapEntry.getKey().getName() + ": " + mapEntry.getKey().getCitiesList());
@@ -241,10 +253,11 @@ public class HobbiesService implements MinimumRequirements {
         }
     }
 
+    //implementam metoda ceruta de interfata "MinimumRequirements"
+    //lista de studenti care sunt comuni pt. 2 hobby-uri
     @Override
     public Collection<Student> findIntersection(Collection<Student> c1, Collection<Student> c2) {
         Collection intersectionList = new TreeSet();
-
         intersectionList = c1.stream().distinct().filter(c2::contains).collect(Collectors.toSet());
         //varianta manuala, cea de mai sus e mai eleganta
         /*
@@ -258,10 +271,10 @@ public class HobbiesService implements MinimumRequirements {
         */
         return intersectionList;
     }
-
-    public void printSharedStudentsBetweenHobies(Hobby hobby1, Hobby hobby2, Collection<Student> studentCollection){
+    //afisam lista de studenti comuni pt. 2 hobby-uri
+    public void printSharedStudentsBetweenHobies(Hobby hobby1, Hobby hobby2, Collection<Student> studentCollection) {
         System.out.println("\nUrmatorii studenti impartasesc " + hobby1.getName() + " si " + hobby2.getName() + ":");
-        for (Student student : studentCollection){
+        for (Student student : studentCollection) {
             System.out.println("\n\t" + student);
         }
     }

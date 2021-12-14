@@ -1,7 +1,7 @@
 package ro.siit.collections.model;
 
 import java.util.Objects;
-
+//lista de adrese
 public class Address {
 
     private String street;

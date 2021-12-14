@@ -7,7 +7,7 @@ public class Student extends Person {
     private String studentID; //numarul matricol
     private String college;
 
-
+    //folosim constructorul din parinte
     public Student(String firstName, String lastName, String cnp, int age, String studentID, String college){
         super(firstName, lastName, cnp, age);
         this.studentID = studentID;
