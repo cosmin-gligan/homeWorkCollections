@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 //nu era ceruta in tema, am vrut sa mai exersez cu "inheritance-ul"
+//puteam face clasa concreta, am vrut sa exersez tematica clasa abstracta
 public abstract class Person implements Comparable<Person> {
 
     protected String firstName;

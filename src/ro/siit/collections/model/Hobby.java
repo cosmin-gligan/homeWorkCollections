@@ -71,11 +71,7 @@ public class Hobby implements Comparable<Hobby> {
 
     @Override
     public String toString() {
-        return "Hobby{" +
-                "name='" + name + '\'' +
-                ", frequency=" + frequency +
-                ", adresaList=" + addressList +
-                '}';
+        return this.getName();
     }
 
 

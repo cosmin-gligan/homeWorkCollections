@@ -63,6 +63,7 @@ public class HobbiesService implements MinimumRequirements {
         Student nicoaraTania = new Student("Nicoara", "Tania", "6010903360261", 20, "111007", CollegeEnum.MEDICINA.toString());
         Student panaClaudia = new Student("Pana", "Claudia", "2991024342055", 22, "167005", CollegeEnum.POLITENICA.toString());
 
+        //folosim CNP-ul ca si key pt. map
         Map<String, Student> studentsMap = new TreeMap<>() {{
             put(andreiPopescu.getCnp(), andreiPopescu);
             put(ioanaGheorghe.getCnp(), ioanaGheorghe);
@@ -92,6 +93,7 @@ public class HobbiesService implements MinimumRequirements {
         Address rebreanu = new Address("Liviu Rebreanu", "12", "Buzau", "Buzau", "62151");
         Address enescu = new Address("George Enescu", "33", "Oradea", "Bihor", "15710");
 
+        //folosim codul postal ( e suficient pt. tema ) ca si cheie pt. harta
         Map<String, Address> addressesMap = new TreeMap<>() {{
             put(stefan.getPostalCode(), stefan);
             put(mihai.getPostalCode(), mihai);
@@ -109,7 +111,6 @@ public class HobbiesService implements MinimumRequirements {
     }
     //populam lista de adrese pe hobby-uri
     private Map<String, Hobby> populateHobbies(Map<String, Address> addresses) {
-
         Hobby gym = new Hobby("Gym", 3);
         List<Address> gymAddresses = new ArrayList<>();
         gymAddresses.add(addresses.get("10532"));
@@ -154,13 +155,13 @@ public class HobbiesService implements MinimumRequirements {
         shopping.setAddressList(shoppingAddresses);
 
         Map<String, Hobby> hobbiesMap = new TreeMap<>() {{
-            put(gym.getName(), gym);
-            put(swimming.getName(), swimming);
-            put(darts.getName(), darts);
-            put(bowling.getName(), bowling);
-            put(cinema.getName(), cinema);
-            put(zoo.getName(), zoo);
-            put(shopping.getName(), shopping);
+            put(gym.toString(), gym);
+            put(swimming.toString(), swimming);
+            put(darts.toString(), darts);
+            put(bowling.toString(), bowling);
+            put(cinema.toString(), cinema);
+            put(zoo.toString(), zoo);
+            put(shopping.toString(), shopping);
         }};
         return hobbiesMap;
     }
@@ -183,7 +184,7 @@ public class HobbiesService implements MinimumRequirements {
         return studentHobbiesMap;
     }
 
-    //numar ateatoriu de hobby-uri ( folosim si in randomNoOfHobbies )
+    //numar aleatoriu de hobby-uri ( folosim si in randomNoOfHobbies )
     private int randomNumber(int minNoOfHobbies, int maxNoOfHobbies) {
         Random random = new Random();
         return random.nextInt(maxNoOfHobbies - minNoOfHobbies + 1) + minNoOfHobbies;
@@ -217,13 +218,13 @@ public class HobbiesService implements MinimumRequirements {
                 break;
             }
         }
+
         StringBuilder st = new StringBuilder();
         st.append(student.toString());
         st.append("\n\tHobbies list:");
         for (Hobby hobby : studentHobies.getValue()) {
-            st.append("\n\t\t - " + hobby.getName() + ": " + hobby.getCitiesList());
+            st.append("\n\t\t - " + hobby.toString() + ": " + hobby.getCitiesList());
         }
-
         System.out.println(st.toString());
     }
 
@@ -246,7 +247,7 @@ public class HobbiesService implements MinimumRequirements {
     //afisam lista de studenti care practica un hobby
     public void printStudents4Hobbies(Map<Hobby, Collection<Student>> students4Hobbies) {
         for (Map.Entry<Hobby, Collection<Student>> mapEntry : students4Hobbies.entrySet()) {
-            System.out.println("\n" + mapEntry.getKey().getName() + ": " + mapEntry.getKey().getCitiesList());
+            System.out.println("\n" + mapEntry.getKey().toString() + ": " + mapEntry.getKey().getCitiesList());
             for (Student student : mapEntry.getValue()) {
                 System.out.println("\n\t - " + student);
             }
@@ -273,10 +274,9 @@ public class HobbiesService implements MinimumRequirements {
     }
     //afisam lista de studenti comuni pt. 2 hobby-uri
     public void printSharedStudentsBetweenHobies(Hobby hobby1, Hobby hobby2, Collection<Student> studentCollection) {
-        System.out.println("\nUrmatorii studenti impartasesc " + hobby1.getName() + " si " + hobby2.getName() + ":");
+        System.out.println("\nUrmatorii studenti impartasesc " + hobby1.toString() + " si " + hobby2.toString() + ":");
         for (Student student : studentCollection) {
             System.out.println("\n\t" + student);
         }
     }
-
 }
